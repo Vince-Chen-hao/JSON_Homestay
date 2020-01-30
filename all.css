@@ -1,0 +1,13 @@
+
+.header {
+  padding-top: 90px;
+  padding-bottom: 120px;
+  background-image: url("https://twstay.com/management/img/MYC170028/indexH/indexH1.jpg");
+  background-size: cover;
+  background-position: center center;
+}
+
+.bg-cover {
+  background-size: cover;
+  background-position: center ;
+}
