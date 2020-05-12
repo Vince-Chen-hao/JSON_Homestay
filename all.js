@@ -12,7 +12,7 @@ const app = new Vue({
   methods: {
     getUniqueList() {
       const locations = new Set(); // 使用 ES6 中的 set() 取出唯一值
-      this.data.forEach((item, i) => { // 3. 核對跟他相同地區的值，並回傳至locations
+      this.data.forEach((item, i) => { // 核對跟他相同地區的值，並回傳至locations
         locations.add(item.Region)
       })
       this.locations = Array.from(locations); //https://guahsu.io/2017/06/JavaScript-Duplicates-Array/
@@ -24,15 +24,10 @@ const app = new Vue({
       const vm = this
       let items = []
       // 過濾地點
-      if (vm.currentLocation !== '') {
         items = vm.data.filter((item, i) => {
           return (item.Region === vm.currentLocation)&&(item.Picture1 !=='')
          }) //filter當條件為true則顯示
-      } else {
-        items = vm.data.filter((item, i) => {
-          return (item.Picture1 !=='')
-         }) //filter當條件為true則顯示
-      }
+      
       // 分頁製作
       items.forEach((item, i) => { //餘數等於0則新增一組陣列
         if (i % 10 === 0) {

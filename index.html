@@ -6,10 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-    crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
-    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+    integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
   <link rel="stylesheet" href="all.css">
 </head>
 
@@ -17,43 +18,48 @@
   <div id="app">
     <header class="header">
       <div class="container text-center">
-        <h1 class="text-white" style="margin-bottom: 95px">全台民宿資訊</h1>
+        <h1 class="text-white" style="margin-bottom: 95px">台灣民宿網</h1>
         <div class="row justify-content-center">
           <div class="col-sm-6">
             <select name="" id="" class="form-control input-lg" v-model="currentLocation">
-              <option value="">-- 全部 --</option>
+              <option value="">-- 請選擇縣市 --</option>
               <option :value="location" v-for="location in locations">{{ location }}</option>
             </select>
           </div>
         </div>
       </div>
     </header>
-    
-    <section style="margin-top: -15px">
+
+    <section style="margin-top: -5px">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-10 mt-5">
+          <div class="col-10 mt-4">
             <div class="bg-white p-3 shadow-sm">
-              <h4>熱門旅遊縣市</h4>
-              <button class="btn btn-primary px-4" @click="currentLocation = '宜蘭縣'">宜蘭縣</button>
-              <button class="btn btn-primary px-4" @click="currentLocation = '臺南市'">臺南市</button>
-              <button class="btn btn-primary px-4" @click="currentLocation = '高雄市'">高雄市</button>
-
+              <h4 class="mb-4">
+                <i class="el-icon-place"></i>
+                熱門旅遊縣市</h4>
+              <el-button icon="el-icon-search" @click="currentLocation = '高雄市'" type="primary">高雄市</el-button>
+              <el-button icon="el-icon-search" @click="currentLocation = '宜蘭縣'" type="success">宜蘭縣</el-button>
+              <el-button icon="el-icon-search" @click="currentLocation = '臺南市'" type="warning">臺南市</el-button>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <el-divider><i class="el-icon-arrow-down"></i> </el-divider>
+
     <div class="container">
-      <hr class="my-4">
-      <h2 class="text-center ">{{ currentLocation }}</h2>
+      <h4 v-if="!currentLocation" class="text-center my-4">選擇欲查詢縣市</h4>
+      <h4 v-else class="my-5 text-center">您正在搜尋【{{ currentLocation }}】</h4>
+
       <section>
         <div class="row">
-          <div class="col-sm-6 mb-4" v-for="(item,i) in filterData[currentPage]">
-            <div class="card shadow-sm border-0 h-100">
-              <h4 class="text-center bg-light" >{{ item.Name }}</h4>
-              <div class="card-header bg-cover" 
-                :style="{ backgroundImage: `url(${item.Picture1})` }"
+          <div class="col-md-6 mb-4" v-for="(item,i) in filterData[currentPage]">
+            <div class="card h-100">
+              <h5 class="text-center card-bg"><i class="el-icon-s-home"></i>
+                {{ item.Name }}</h5>
+
+              <div class="card-header bg-cover" :style="{ backgroundImage: `url(${item.Picture1})` }"
                 style="height: 305px;">
               </div>
               <div class="card-body ">
@@ -61,34 +67,31 @@
                   <li class="d-flex">
                     <div class="text-center" style="width: 30px">
                       <i class="fas fa-clock text-primary"></i>
-                    </div>每晚價格${{ item.LowestPrice }}～${{ item.CeilingPrice }}</li>
+                    </div>每晚價格${{ item.LowestPrice }}～${{ item.CeilingPrice }}
+                  </li>
                   <li class="d-flex">
                     <div class="text-center" style="width: 30px">
                       <i class="fas fa-map-marker text-warning"></i>
                     </div>
-                    {{ item.Add }}</li>
+                    {{ item.Add }}
+                  </li>
                   <li class="d-flex">
                     <div class="text-center" style="width: 30px">
                       <i class="fas fa-mobile-alt text-info"></i>
                     </div>
-                    {{ item.Tel }}</li>
+                    {{ item.Tel }}
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <nav class="my-5" aria-label="Page navigation example">
+      <nav class="my-5" v-if="pages" aria-label="Page navigation">
         <ul class="pagination justify-content-center">
-          <!-- <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-          </li> -->
-          <li class="page-item" v-for="(page,i) in pages"  :class="{active: currentPage === page - 1}">
-            <a class="page-link" href="#" @click.prevent="currentPage = (page - 1)" v-if="i<10">{{ page }}</a>
+          <li class="page-item" v-for="(page,i) in pages" :class="{active: currentPage === page - 1}">
+            <a class="page-link" href="#" @click.prevent="currentPage = (page - 1)" v-if="i<12">{{ page }}</a>
           </li>
-          <!-- <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-          </li> -->
         </ul>
       </nav>
     </div>
@@ -98,10 +101,10 @@
     <div>資料來源：交通部觀光局</div>
   </footer>
 
-  <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
   <script src="all.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 </body>
 
 </html>

@@ -2,7 +2,7 @@
 .header {
   padding-top: 90px;
   padding-bottom: 120px;
-  background-image: url("https://twstay.com/management/img/MYC170028/indexH/indexH1.jpg");
+  background-image: url("https://farm4.staticflickr.com/3890/15317709925_20f7c450c5_b.jpg");
   background-size: cover;
   background-position: center center;
 }
@@ -10,4 +10,20 @@
 .bg-cover {
   background-size: cover;
   background-position: center ;
+}
+
+.card{
+  box-shadow: 6px 6px 7px 1px 
+  rgba(140,136,140,0.46);
+}
+
+.card-bg{
+  background-color:rgba(212, 237, 245, 0.858);
+  padding:5px;
+}
+
+body{
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
 }
