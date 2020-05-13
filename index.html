@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>台灣民宿網</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
     integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
@@ -18,7 +18,7 @@
   <div id="app">
     <header class="header">
       <div class="container text-center">
-        <h1 class="text-white" style="margin-bottom: 95px">台灣民宿網</h1>
+        <h1 class="text-white" style="margin-bottom: 95px">台灣民宿資訊</h1>
         <div class="row justify-content-center">
           <div class="col-sm-6">
             <select name="" id="" class="form-control input-lg" v-model="currentLocation">
@@ -38,7 +38,6 @@
               <h4 class="mb-4">
                 <i class="el-icon-place"></i>
                 熱門旅遊縣市</h4>
-              <el-button icon="el-icon-search" @click="currentLocation = '高雄市'" type="primary">高雄市</el-button>
               <el-button icon="el-icon-search" @click="currentLocation = '宜蘭縣'" type="success">宜蘭縣</el-button>
               <el-button icon="el-icon-search" @click="currentLocation = '臺南市'" type="warning">臺南市</el-button>
             </div>
@@ -49,52 +48,135 @@
     <el-divider><i class="el-icon-arrow-down"></i> </el-divider>
 
     <div class="container">
-      <h4 v-if="!currentLocation" class="text-center my-4">選擇欲查詢縣市</h4>
-      <h4 v-else class="my-5 text-center">您正在搜尋【{{ currentLocation }}】</h4>
+      <h4 v-if="currentLocation" class="my-5 text-center">正在搜尋【{{ currentLocation }}】</h4>
 
-      <section>
-        <div class="row">
-          <div class="col-md-6 mb-4" v-for="(item,i) in filterData[currentPage]">
-            <div class="card h-100">
-              <h5 class="text-center card-bg"><i class="el-icon-s-home"></i>
-                {{ item.Name }}</h5>
-
-              <div class="card-header bg-cover" :style="{ backgroundImage: `url(${item.Picture1})` }"
-                style="height: 305px;">
-              </div>
-              <div class="card-body ">
-                <ul class="list-unstyled mb-0">
-                  <li class="d-flex">
-                    <div class="text-center" style="width: 30px">
-                      <i class="fas fa-clock text-primary"></i>
-                    </div>每晚價格${{ item.LowestPrice }}～${{ item.CeilingPrice }}
-                  </li>
-                  <li class="d-flex">
-                    <div class="text-center" style="width: 30px">
-                      <i class="fas fa-map-marker text-warning"></i>
-                    </div>
-                    {{ item.Add }}
-                  </li>
-                  <li class="d-flex">
-                    <div class="text-center" style="width: 30px">
-                      <i class="fas fa-mobile-alt text-info"></i>
-                    </div>
-                    {{ item.Tel }}
-                  </li>
-                </ul>
+      <div class="row" v-if="currentLocation">
+        <div class="col-lg-2 col-md-3 mb-4">
+          <div class="sticky-top shadow-sm rounded p-3">
+            <h5 class="text-center priceRangeTitle">每晚價格</h5>
+            <hr>
+            <div class="priceRange" style="font-size:12px">
+              <ul class="p-0" style="list-style-type:none">
+                <li>
+                  <input type="radio" class="mr-1" id="price-1" value="1 1000" v-model="filteredPrice">
+                  <label for="price-1">
+                    <span> NT$1,000 以下</span>
+                  </label>
+                </li>
+                <li>
+                  <input type="radio" class="mr-1" id="price-2" value="1001 2500" v-model="filteredPrice">
+                  <label for="price-2">
+                    <span> NT$1,000 - $2,500</span>
+                  </label>
+                </li>
+                <li>
+                  <input type="radio" class="mr-1" id="price-3" value="2501 5000" v-model="filteredPrice">
+                  <label for="price-3">
+                    <span> NT$2,500 - $5,000</span>
+                  </label>
+                </li>
+                <li>
+                  <input type="radio" class="mr-1" id="price-4" value="5001" v-model="filteredPrice">
+                  <label for="price-4">
+                    <span> NT$5,000 以上</span>
+                  </label>
+                </li>
+                <li>
+                  <a href="#" @click.prevent="emptyList">清除篩選條件</a>
+                </li>
+              </ul>
+              <hr>
+              <div class="sumbit">
+                <!-- 文字輸入之按下按鈕執行文字輸入的篩選 -->
+                <div class="btn btn-primary btn-block" @click="submitFilterText">查詢</div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-      <nav class="my-5" v-if="pages" aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          <li class="page-item" v-for="(page,i) in pages" :class="{active: currentPage === page - 1}">
-            <a class="page-link" href="#" @click.prevent="currentPage = (page - 1)" v-if="i<12">{{ page }}</a>
-          </li>
-        </ul>
-      </nav>
+
+        <div class="col-lg-10 col-md-8 mb-4">
+          <section v-if="!openfilteredData">
+            <div class="row">
+              <div class="col-lg-4 col-md-6 mb-4" v-for="(item,i) in filterData[currentPage]">
+                <div class="card h-60">
+                  <h5 class="text-center card-bg"><i class="el-icon-s-home"></i>
+                    {{ item.Name }}</h5>
+
+                  <div class="card-header bg-cover" :style="{ backgroundImage: `url(${item.Picture1})` }"
+                    style="height: 305px;">
+                  </div>
+                  <div class="card-body ">
+                    <ul class="list-unstyled mb-0">
+                      <li class="d-flex">
+                        <div class="text-center" style="width: 30px">
+                          <i class="fas fa-clock text-primary"></i>
+                        </div>每晚價格 $ {{ item.LowestPrice }} 起
+                      </li>
+                      <li class="d-flex">
+                        <div class="text-center" style="width: 30px">
+                          <i class="fas fa-map-marker text-warning"></i>
+                        </div>
+                        {{ item.Add }}
+                      </li>
+                      <li class="d-flex">
+                        <div class="text-center" style="width: 30px">
+                          <i class="fas fa-mobile-alt text-info"></i>
+                        </div>
+                        {{ item.Tel }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+          </section>
+
+          <section v-if="openfilteredData">
+            <div class="row">
+              <div class="col-lg-4 col-md-6 mb-4" v-for="(item,i) in filterprice">
+                <div class="card h-100">
+                  <h5 class="text-center card-bg"><i class="el-icon-s-home"></i>
+                    {{ item.Name }}</h5>
+
+                  <div class="card-header bg-cover" :style="{ backgroundImage: `url(${item.Picture1})` }"
+                    style="height: 305px;">
+                  </div>
+                  <div class="card-body ">
+                    <ul class="list-unstyled mb-0">
+                      <li class="d-flex">
+                        <div class="text-center" style="width: 30px">
+                          <i class="fas fa-clock text-primary"></i>
+                        </div>每晚價格 $ {{ item.LowestPrice }} 起
+                      </li>
+                      <li class="d-flex">
+                        <div class="text-center" style="width: 30px">
+                          <i class="fas fa-map-marker text-warning"></i>
+                        </div>
+                        {{ item.Add }}
+                      </li>
+                      <li class="d-flex">
+                        <div class="text-center" style="width: 30px">
+                          <i class="fas fa-mobile-alt text-info"></i>
+                        </div>
+                        {{ item.Tel }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
     </div>
+
+    <nav class="my-5" v-if="!openfilteredData" aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" v-for="(page,i) in pages" :class="{active: currentPage === page - 1}">
+          <a class="page-link" href="#" @click.prevent="currentPage = (page - 1)" v-if="i<8">{{ page }}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
   </div>
 
   <footer class="text-center bg-info text-white py-4">
