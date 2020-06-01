@@ -53,32 +53,32 @@
       <div class="row" v-if="currentLocation">
         <div class="col-lg-2 col-md-3 mb-4">
           <div class="sticky-top shadow-sm rounded p-3">
-            <h5 class="text-center priceRangeTitle">每晚價格</h5>
+            <h5 class="text-center priceRangeTitle">篩選價格</h5>
             <hr>
             <div class="priceRange" style="font-size:12px">
               <ul class="p-0" style="list-style-type:none">
                 <li>
                   <input type="radio" class="mr-1" id="price-1" value="1 1000" v-model="filteredPrice">
                   <label for="price-1">
-                    <span> NT$1,000 以下</span>
+                    <span> $1,000 以下</span>
                   </label>
                 </li>
                 <li>
                   <input type="radio" class="mr-1" id="price-2" value="1001 2500" v-model="filteredPrice">
                   <label for="price-2">
-                    <span> NT$1,000 - $2,500</span>
+                    <span> $1,000 - $2,500</span>
                   </label>
                 </li>
                 <li>
                   <input type="radio" class="mr-1" id="price-3" value="2501 5000" v-model="filteredPrice">
                   <label for="price-3">
-                    <span> NT$2,500 - $5,000</span>
+                    <span> $2,500 - $5,000</span>
                   </label>
                 </li>
                 <li>
                   <input type="radio" class="mr-1" id="price-4" value="5001" v-model="filteredPrice">
                   <label for="price-4">
-                    <span> NT$5,000 以上</span>
+                    <span> $5,000 以上</span>
                   </label>
                 </li>
                 <li>
@@ -97,7 +97,7 @@
         <div class="col-lg-10 col-md-8 mb-4">
           <section v-if="!openfilteredData">
             <div class="row">
-              <div class="col-lg-4 col-md-6 mb-4" v-for="(item,i) in filterData[currentPage]">
+              <div class="col-lg-6 mb-4" v-for="(item,i) in filterData[currentPage]">
                 <div class="card h-60">
                   <h5 class="text-center card-bg"><i class="el-icon-s-home"></i>
                     {{ item.Name }}</h5>
@@ -110,7 +110,7 @@
                       <li class="d-flex">
                         <div class="text-center" style="width: 30px">
                           <i class="fas fa-clock text-primary"></i>
-                        </div>每晚價格 $ {{ item.LowestPrice }} 起
+                        </div>價格 $ {{ item.LowestPrice }} 起
                       </li>
                       <li class="d-flex">
                         <div class="text-center" style="width: 30px">
@@ -142,7 +142,7 @@
                   </div>
                   <div class="card-body ">
                     <ul class="list-unstyled mb-0">
-                      <li class="d-flex">
+                      <li class="d-flex" >
                         <div class="text-center" style="width: 30px">
                           <i class="fas fa-clock text-primary"></i>
                         </div>每晚價格 $ {{ item.LowestPrice }} 起
